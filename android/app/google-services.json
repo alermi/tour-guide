@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "252505254495",
+    "project_id": "tour-guide-48e95",
+    "storage_bucket": "tour-guide-48e95.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:252505254495:android:5da2550804c38c084a89ea",
+        "android_client_info": {
+          "package_name": "com.lermi.tourguide"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "252505254495-rg92a0gbhiu1ntlk4ccgqn5kiqvna46o.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.lermi.tourguide",
+            "certificate_hash": "d3107d38f1ac24ee43ccc27b60829a2224794d2f"
+          }
+        },
+        {
+          "client_id": "252505254495-9oebvcv9roj3c97duddaep79ih7cvlb7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCu1_V9-3Fji9aQO64wxmAwtz7y7dk8mlg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "252505254495-9oebvcv9roj3c97duddaep79ih7cvlb7.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
