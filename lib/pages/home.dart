@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:tour_guide/pages/map.dart';
 import 'package:tour_guide/services/auth.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key) {
+    Permission.location.request();
+  }
 
   @override
   Widget build(BuildContext context) {
     final AuthService _authService = AuthService();
-
     return Scaffold(
       appBar: AppBar(
         title: Text("Home Page"),
@@ -23,7 +26,7 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: Center(
-        child: Text("Content"),
+        child: MapPage(),
       ),
     );
   }

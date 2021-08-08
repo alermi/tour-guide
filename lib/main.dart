@@ -36,7 +36,6 @@ class _AppState extends State<App> {
       future: _initialization,
       builder: (context, snapshot) {
         // Check for errors
-        var child;
         if (snapshot.hasError) {
           return MaterialApp(
               home: ErrorPage(message: snapshot.error.toString()));

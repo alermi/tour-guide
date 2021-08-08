@@ -1,8 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lermi.tourguide">
+   <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+   <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
    <application
         android:label="tour_guide"
         android:icon="@mipmap/ic_launcher">
+        <meta-data android:name="com.google.android.geo.API_KEY"
+               android:value="AIzaSyAtwWg5kZMnjXhGb4WLnO_LNqZ-8lsMyhA"/>
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
