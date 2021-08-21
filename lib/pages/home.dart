@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     final AuthService _authService = AuthService();
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home Page"),
+        title: Text("Tour Guide"),
         actions: <Widget>[
           TextButton.icon(
             style: TextButton.styleFrom(primary: Colors.white),
