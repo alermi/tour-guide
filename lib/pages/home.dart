@@ -3,8 +3,6 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tour_guide/pages/map.dart';
 import 'package:tour_guide/services/auth.dart';
 
-import 'audio/audio_player.dart';
-
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key) {
     Permission.location.request();
@@ -28,10 +26,6 @@ class HomePage extends StatelessWidget {
         ],
       ),
       body: MapPage(),
-      bottomSheet: Container(
-        height: 130,
-        child: AudioPlayerView(),
-      ),
     );
   }
 }

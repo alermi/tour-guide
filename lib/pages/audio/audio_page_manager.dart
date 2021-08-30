@@ -11,13 +11,11 @@ class AudioPageManager {
   );
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
 
-  static const url =
-      'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3';
   late AudioPlayer _audioPlayer;
-  AudioPageManager() {
-    _init();
+  AudioPageManager(String url) {
+    _init(url);
   }
-  void _init() async {
+  void _init(String url) async {
     _audioPlayer = AudioPlayer();
     await _audioPlayer.setUrl(url);
     _audioPlayer.playerStateStream.listen((playerState) {

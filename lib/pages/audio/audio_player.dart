@@ -3,7 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:tour_guide/pages/audio/audio_page_manager.dart';
 
 class AudioPlayerView extends StatefulWidget {
-  const AudioPlayerView({Key? key}) : super(key: key);
+  const AudioPlayerView({Key? key, required String url})
+      : url = url,
+        super(key: key);
+  final String url;
 
   @override
   _AudioPlayerViewState createState() => _AudioPlayerViewState();
@@ -15,7 +18,7 @@ class _AudioPlayerViewState extends State<AudioPlayerView> {
   @override
   void initState() {
     super.initState();
-    _pageManager = AudioPageManager();
+    _pageManager = AudioPageManager(widget.url);
   }
 
   @override
