@@ -12,12 +12,11 @@ class AudioPageManager {
   final buttonNotifier = ValueNotifier<ButtonState>(ButtonState.paused);
 
   late AudioPlayer _audioPlayer;
-  AudioPageManager(String url) {
-    _init(url);
+  AudioPageManager() {
+    _init();
   }
-  void _init(String url) async {
+  void _init() async {
     _audioPlayer = AudioPlayer();
-    await _audioPlayer.setUrl(url);
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
       final processingState = playerState.processingState;
@@ -74,6 +73,10 @@ class AudioPageManager {
 
   void seek(Duration position) {
     _audioPlayer.seek(position);
+  }
+
+  void setUrl(String url) async {
+    await _audioPlayer.setUrl(url);
   }
 }
 

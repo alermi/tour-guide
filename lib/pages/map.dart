@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tour_guide/models/point.dart';
+import 'package:tour_guide/pages/audio/audio_page_manager.dart';
 import 'package:tour_guide/pages/audio/audio_player.dart';
 
 class MapPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class _MapPageState extends State<MapPage> {
 
   Point? _currentPoint;
   late GoogleMapController mapController;
+  final AudioPageManager audioPageManager = AudioPageManager();
   void _onMapCreated(GoogleMapController controller) {
     mapController = controller;
   }
@@ -26,6 +28,7 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _currentPoint = _newPoint;
     });
+    audioPageManager.setUrl(_newPoint.soundUrl);
   }
 
   @override
@@ -60,7 +63,9 @@ class _MapPageState extends State<MapPage> {
       bottomSheet: _currentPoint != null
           ? Container(
               height: 130,
-              child: AudioPlayerView(url: _currentPoint!.soundUrl),
+              child: AudioPlayerView(
+                audioPageManager: audioPageManager,
+              ),
             )
           : null,
     );

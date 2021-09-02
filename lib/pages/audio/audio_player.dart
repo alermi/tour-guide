@@ -3,22 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:tour_guide/pages/audio/audio_page_manager.dart';
 
 class AudioPlayerView extends StatefulWidget {
-  const AudioPlayerView({Key? key, required String url})
-      : url = url,
+  const AudioPlayerView({Key? key, required AudioPageManager audioPageManager})
+      : _pageManager = audioPageManager,
         super(key: key);
-  final String url;
+  final AudioPageManager _pageManager;
+
+  static _AudioPlayerViewState? of(BuildContext context) =>
+      context.findAncestorStateOfType<_AudioPlayerViewState>();
 
   @override
-  _AudioPlayerViewState createState() => _AudioPlayerViewState();
+  _AudioPlayerViewState createState() => _AudioPlayerViewState(_pageManager);
 }
 
 class _AudioPlayerViewState extends State<AudioPlayerView> {
   late final AudioPageManager _pageManager;
 
-  @override
-  void initState() {
-    super.initState();
-    _pageManager = AudioPageManager(widget.url);
+  _AudioPlayerViewState(AudioPageManager _pageManager) {
+    this._pageManager = _pageManager;
   }
 
   @override
