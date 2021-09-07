@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
+import 'package:tour_guide/services/storage.dart';
 
 class AudioPageManager {
   final progressNotifier = ValueNotifier<ProgressBarState>(
@@ -76,7 +77,16 @@ class AudioPageManager {
   }
 
   void setUrl(String url) async {
-    await _audioPlayer.setUrl(url);
+    //TODO: Fix into directories
+    //TODO: Dont call this await function every time
+    try {
+      String absoluteUrl = (await StorageService.getAppRootDir()).path +
+          '/' +
+          url.split('/').last;
+      await _audioPlayer.setFilePath(absoluteUrl);
+    } on Exception catch (e) {
+      print(e.toString());
+    }
   }
 }
 

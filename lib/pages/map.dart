@@ -3,6 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:tour_guide/models/point.dart';
 import 'package:tour_guide/pages/audio/audio_page_manager.dart';
 import 'package:tour_guide/pages/audio/audio_player.dart';
+import 'package:tour_guide/services/storage.dart';
 
 class MapPage extends StatefulWidget {
   MapPage({Key? key}) : super(key: key);
@@ -15,6 +16,13 @@ class _MapPageState extends State<MapPage> {
   @override
   void initState() {
     super.initState();
+  }
+
+  _MapPageState() {
+    //TODO: Probably call this somewhere else
+    for (Point point in mockPoints) {
+      StorageService.downloadFile(point.soundUrl);
+    }
   }
 
   Point? _currentPoint;
