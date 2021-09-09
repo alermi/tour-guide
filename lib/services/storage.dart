@@ -10,6 +10,17 @@ class StorageService {
     return getApplicationDocumentsDirectory();
   }
 
+  static Future<String?> getDownloadUrl(String url) async {
+    try {
+      Reference ref = FirebaseStorage.instance.ref(url);
+      return await ref.getDownloadURL();
+    } on FirebaseException catch (e) {
+      // e.g, e.code == 'canceled'
+      print("Error caught on StorageService downloadFile.");
+      print(e.message);
+    }
+  }
+
   static Future<void> downloadFile(String url) async {
     Directory appDocDir = await getAppRootDir();
     //TODO: Fix into directories
@@ -19,7 +30,6 @@ class StorageService {
     }
     try {
       Reference ref = FirebaseStorage.instance.ref(url);
-      String downloadUrl = await ref.getDownloadURL();
       TaskSnapshot task = await ref.writeToFile(downloadToFile);
       return;
     } on FirebaseException catch (e) {

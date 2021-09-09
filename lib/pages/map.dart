@@ -21,7 +21,7 @@ class _MapPageState extends State<MapPage> {
   _MapPageState() {
     //TODO: Probably call this somewhere else
     for (Point point in mockPoints) {
-      StorageService.downloadFile(point.soundUrl);
+      StorageService.downloadFile(point.audioLocation);
     }
   }
 
@@ -36,7 +36,7 @@ class _MapPageState extends State<MapPage> {
     setState(() {
       _currentPoint = _newPoint;
     });
-    audioPageManager.setUrl(_newPoint.soundUrl);
+    audioPageManager.setUrl(_newPoint.audioLocation);
   }
 
   @override

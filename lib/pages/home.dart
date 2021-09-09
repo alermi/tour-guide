@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tour_guide/pages/map.dart';
+import 'package:tour_guide/pages/site_selector.dart';
 import 'package:tour_guide/services/auth.dart';
 
 class HomePage extends StatelessWidget {
@@ -25,7 +26,7 @@ class HomePage extends StatelessWidget {
           )
         ],
       ),
-      body: MapPage(),
+      body: SiteSelector(),
     );
   }
 }

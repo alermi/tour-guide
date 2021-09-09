@@ -4,9 +4,9 @@ class Point {
   final String uniqueId;
   final LatLng coordinates;
 
-  final String soundUrl;
+  final String audioLocation;
 
-  Point(this.uniqueId, this.coordinates, this.soundUrl);
+  Point(this.uniqueId, this.coordinates, this.audioLocation);
 }
 
 List<Point> mockPoints = [
