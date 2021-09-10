@@ -6,7 +6,7 @@ class TourSite {
   final LatLng initialPosition;
   final LatLng northeastBound;
   final LatLng southwestBound;
-  final int initialZoom;
+  final double initialZoom;
   TourSite(this.uniqueId, this.siteName, this.initialPosition,
       this.northeastBound, this.southwestBound,
       {this.initialZoom = 17});

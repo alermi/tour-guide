@@ -31,7 +31,9 @@ class _SiteSelectorState extends State<SiteSelector> {
         if (snapshot.connectionState != ConnectionState.done) {
           return MaterialApp(home: LoadingPage());
         }
-        if (!snapshot.hasData) {
+        if (!snapshot.hasData ||
+            snapshot.data == null ||
+            snapshot.data!.length <= selectedIndex) {
           //TODO: Handle
           return Text("Not handled state: hasData false");
         } else {
@@ -59,7 +61,9 @@ class _SiteSelectorState extends State<SiteSelector> {
                       onPressed: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => MapPage()),
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  MapPage(snapshot.data![selectedIndex])),
                         );
                       },
                       child: Text('Start')))
