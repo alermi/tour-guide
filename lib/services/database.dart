@@ -1,4 +1,5 @@
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tour_guide/models/pack.dart';
 import 'package:tour_guide/models/point.dart';
 import 'package:tour_guide/models/tour_site.dart';
 
@@ -34,7 +35,7 @@ class DatabaseService {
             ]);
   }
 
-  Future<List<Point>> getTourSitePoints(String tourSiteUniqueId) {
+  Future<List<Point>> getPurchasedTourSitePoints(String tourSiteUniqueId) {
     // if (!initialized) {
     //   throw Exception("Database not initialized");
     // }
@@ -49,6 +50,23 @@ class DatabaseService {
           ];
         case "2":
           return [];
+        default:
+          return [];
+      }
+    });
+  }
+
+  Future<List<Pack>> getAvailablePacks(String tourSiteUniqueId) {
+    return Future.delayed(Duration(milliseconds: 100), () {
+      switch (tourSiteUniqueId) {
+        case "1":
+          return [Pack("Abdullah Lermi", 5.0, 2)];
+        case "2":
+          return [
+            Pack("Ani Lermi", 5.0, 1),
+            Pack("Abdullah Lermi", 5.0, 2),
+            Pack("Sule Lermi", 5.0, 3)
+          ];
         default:
           return [];
       }

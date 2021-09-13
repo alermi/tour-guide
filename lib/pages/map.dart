@@ -5,6 +5,7 @@ import 'package:tour_guide/models/tour_site.dart';
 import 'package:tour_guide/pages/audio/audio_page_manager.dart';
 import 'package:tour_guide/pages/audio/audio_player.dart';
 import 'package:tour_guide/pages/error.dart';
+import 'package:tour_guide/pages/get_pack.dart';
 import 'package:tour_guide/pages/loading.dart';
 import 'package:tour_guide/services/database.dart';
 import 'package:tour_guide/services/storage.dart';
@@ -24,8 +25,8 @@ class _MapPageState extends State<MapPage> {
   }
 
   _MapPageState(this.tourSite)
-      : tourSitePointsFuture =
-            DatabaseService.instance.getTourSitePoints(tourSite.uniqueId) {
+      : tourSitePointsFuture = DatabaseService.instance
+            .getPurchasedTourSitePoints(tourSite.uniqueId) {
     tourSitePointsFuture.then((pointList) {
       setState(() {
         tourSitePoints = pointList;
@@ -83,23 +84,25 @@ class _MapPageState extends State<MapPage> {
               .toList();
           return Scaffold(
             appBar: AppBar(),
-            body: GoogleMap(
-              mapType: MapType.hybrid,
-              myLocationEnabled: true,
-              //TODO: Add this as a TourSite data too maybe
-              minMaxZoomPreference: MinMaxZoomPreference(16, 20),
-              cameraTargetBounds: CameraTargetBounds(
-                LatLngBounds(
-                    northeast: tourSite.northeastBound,
-                    southwest: tourSite.southwestBound),
-              ),
-              onMapCreated: _onMapCreated,
-              initialCameraPosition: CameraPosition(
-                target: tourSite.initialPosition,
-                zoom: tourSite.initialZoom,
-              ),
-              markers: _markers.toSet(),
-            ),
+            body: tourSitePoints!.isEmpty
+                ? GetPackView(tourSite)
+                : GoogleMap(
+                    mapType: MapType.hybrid,
+                    myLocationEnabled: true,
+                    //TODO: Add this as a TourSite data too maybe
+                    minMaxZoomPreference: MinMaxZoomPreference(16, 20),
+                    cameraTargetBounds: CameraTargetBounds(
+                      LatLngBounds(
+                          northeast: tourSite.northeastBound,
+                          southwest: tourSite.southwestBound),
+                    ),
+                    onMapCreated: _onMapCreated,
+                    initialCameraPosition: CameraPosition(
+                      target: tourSite.initialPosition,
+                      zoom: tourSite.initialZoom,
+                    ),
+                    markers: _markers.toSet(),
+                  ),
             bottomSheet: _currentPoint != null
                 ? Container(
                     height: 130,
