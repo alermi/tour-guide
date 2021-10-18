@@ -37,6 +37,22 @@ class _MapPageState extends State<MapPage> {
       });
     });
   }
+
+  Future<void> reloadPoints() {
+    tourSitePointsFuture =
+        DatabaseService.instance.getPurchasedTourSitePoints(tourSite.uniqueId);
+    return tourSitePointsFuture.then((pointList) {
+      // print('Setting state to points ' + pointList.length.toString());
+      setState(() {
+        tourSitePoints = pointList;
+        var _downloadFutures = pointList
+            .map((point) => StorageService.downloadFile(point.audioLocation))
+            .toList();
+        downloadFuturesWait = Future.wait(_downloadFutures);
+      });
+    });
+  }
+
   Future<void>? downloadFuturesWait;
   final TourSite tourSite;
   Future<List<Point>> tourSitePointsFuture;
@@ -85,7 +101,7 @@ class _MapPageState extends State<MapPage> {
           return Scaffold(
             appBar: AppBar(),
             body: tourSitePoints!.isEmpty
-                ? GetPackView(tourSite)
+                ? GetPackView(tourSite, reloadPoints)
                 : GoogleMap(
                     mapType: MapType.hybrid,
                     myLocationEnabled: true,
