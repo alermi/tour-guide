@@ -6,9 +6,9 @@ import 'package:tour_guide/models/pack.dart';
 import 'package:tour_guide/services/database.dart';
 
 class PackRow extends StatefulWidget {
-  const PackRow(this.pack, this.reloadPoints, {Key? key}) : super(key: key);
+  const PackRow(this.pack, this.reloadPacks, {Key? key}) : super(key: key);
   final Pack pack;
-  final Future<void> Function() reloadPoints;
+  final Future<void> Function() reloadPacks;
 
   @override
   _PackRowState createState() => _PackRowState();
@@ -69,7 +69,7 @@ class _PackRowState extends State<PackRow> {
                   setState(() {
                     downloading = false;
                   });
-                  widget.reloadPoints();
+                  widget.reloadPacks();
                 });
                 downloadFuture.onError((error, stackTrace) {
                   setState(() {

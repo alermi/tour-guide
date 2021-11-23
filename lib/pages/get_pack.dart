@@ -8,10 +8,10 @@ import 'package:tour_guide/pages/pack_row.dart';
 import 'package:tour_guide/services/database.dart';
 
 class GetPackView extends StatefulWidget {
-  const GetPackView(this.tourSite, this.reloadPoints, {Key? key})
+  const GetPackView(this.tourSite, this.reloadPacks, {Key? key})
       : super(key: key);
   final TourSite tourSite;
-  final Future<void> Function() reloadPoints;
+  final Future<void> Function() reloadPacks;
   @override
   _GetPackViewState createState() => _GetPackViewState(tourSite);
 }
@@ -49,7 +49,7 @@ class _GetPackViewState extends State<GetPackView> {
                   child: ListView(
                     children: snapshot.data!
                         .map<Widget>(
-                            (element) => PackRow(element, widget.reloadPoints))
+                            (element) => PackRow(element, widget.reloadPacks))
                         .toList(),
                   )),
             ],

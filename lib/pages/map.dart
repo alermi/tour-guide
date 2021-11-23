@@ -42,21 +42,6 @@ class _MapPageState extends State<MapPage> {
     });
   }
 
-  Future<void> reloadPoints() {
-    tourSitePointsFuture =
-        DatabaseService.instance.getPointsInPurchasedPack(tourSite.uniqueId);
-    return tourSitePointsFuture.then((pointList) {
-      // print('Setting state to points ' + pointList.length.toString());
-      setState(() {
-        tourSitePoints = pointList;
-        var _downloadFutures = pointList
-            .map((point) => StorageService.downloadFile(point.audioLocation))
-            .toList();
-        downloadFuturesWait = Future.wait(_downloadFutures);
-      });
-    });
-  }
-
   Future<void>? downloadFuturesWait;
   final TourSite tourSite;
   final Pack pack;
@@ -82,7 +67,6 @@ class _MapPageState extends State<MapPage> {
       return MaterialApp(home: LoadingPage());
     }
     return FutureBuilder(
-      // Initialize FlutterFire:
       future: downloadFuturesWait,
       builder: (context, snapshot) {
         // Check for errors
@@ -103,13 +87,6 @@ class _MapPageState extends State<MapPage> {
                     setCurrentPoint(e);
                   }))
               .toList();
-          print("Opening the map with " +
-              _markers.length.toString() +
-              " points from pack " +
-              widget.pack.uniqueId +
-              " (" +
-              widget.pack.pointCount.toString() +
-              ")");
           return Scaffold(
             appBar: AppBar(
               title: Text(widget.tourSite.siteName),
@@ -128,25 +105,23 @@ class _MapPageState extends State<MapPage> {
                 )
               ],
             ),
-            body: tourSitePoints!.isEmpty
-                ? GetPackView(tourSite, reloadPoints)
-                : GoogleMap(
-                    mapType: MapType.hybrid,
-                    myLocationEnabled: true,
-                    //TODO: Add this as a TourSite data too maybe
-                    minMaxZoomPreference: MinMaxZoomPreference(16, 20),
-                    cameraTargetBounds: CameraTargetBounds(
-                      LatLngBounds(
-                          northeast: tourSite.northeastBound,
-                          southwest: tourSite.southwestBound),
-                    ),
-                    onMapCreated: _onMapCreated,
-                    initialCameraPosition: CameraPosition(
-                      target: tourSite.initialPosition,
-                      zoom: tourSite.initialZoom,
-                    ),
-                    markers: _markers.toSet(),
-                  ),
+            body: GoogleMap(
+              mapType: MapType.hybrid,
+              myLocationEnabled: true,
+              //TODO: Add this as a TourSite data too maybe
+              minMaxZoomPreference: MinMaxZoomPreference(16, 20),
+              cameraTargetBounds: CameraTargetBounds(
+                LatLngBounds(
+                    northeast: tourSite.northeastBound,
+                    southwest: tourSite.southwestBound),
+              ),
+              onMapCreated: _onMapCreated,
+              initialCameraPosition: CameraPosition(
+                target: tourSite.initialPosition,
+                zoom: tourSite.initialZoom,
+              ),
+              markers: _markers.toSet(),
+            ),
             bottomSheet: _currentPoint != null
                 ? Container(
                     height: 130,
