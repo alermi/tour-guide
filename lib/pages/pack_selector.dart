@@ -1,28 +1,36 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:tour_guide/models/pack.dart';
 import 'package:tour_guide/models/tour_site.dart';
 import 'package:tour_guide/pages/error.dart';
-import 'package:tour_guide/pages/pack_selector.dart';
+import 'package:tour_guide/pages/get_pack.dart';
+import 'package:tour_guide/pages/map.dart';
 import 'package:tour_guide/services/database.dart';
 
 import 'loading.dart';
 
-class SiteSelector extends StatefulWidget {
-  const SiteSelector({Key? key}) : super(key: key);
-
+class PackSelector extends StatefulWidget {
+  const PackSelector(this.tourSite, {Key? key}) : super(key: key);
+  final TourSite tourSite;
   @override
-  _SiteSelectorState createState() => _SiteSelectorState();
+  _PackSelectorState createState() => _PackSelectorState(tourSite);
 }
 
-class _SiteSelectorState extends State<SiteSelector> {
+class _PackSelectorState extends State<PackSelector> {
+  _PackSelectorState(TourSite tourSite)
+      : _packs = DatabaseService.instance
+            .getPurchasedTourSitePacks(tourSite.uniqueId) {
+    print('initializing _packs');
+  }
   int selectedIndex = 0;
-  Future<List<TourSite>> _tourSites = DatabaseService.instance.getTourSites();
+  Future<List<Pack>> _packs;
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<TourSite>>(
-      future: _tourSites,
+    print('building');
+    return FutureBuilder<List<Pack>>(
+      future: _packs,
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return MaterialApp(
@@ -31,14 +39,25 @@ class _SiteSelectorState extends State<SiteSelector> {
         if (snapshot.connectionState != ConnectionState.done) {
           return MaterialApp(home: LoadingPage());
         }
-        if (!snapshot.hasData ||
-            snapshot.data == null ||
-            snapshot.data!.length <= selectedIndex) {
+        if (!snapshot.hasData || snapshot.data == null) {
           //TODO: Handle
+          print(snapshot.data);
           return Text("Not handled state: hasData false");
+        }
+        if (snapshot.data!.isEmpty) {
+          return GetPackView(
+            widget.tourSite,
+            () {
+              setState(() {
+                _packs = DatabaseService.instance
+                    .getPurchasedTourSitePacks(widget.tourSite.uniqueId);
+              });
+              return _packs;
+            },
+          );
         } else {
           List<Widget> list =
-              snapshot.data!.map((e) => Text(e.siteName)).toList();
+              snapshot.data!.map((e) => Text(e.tourGuide.name)).toList();
           return Column(
             children: [
               Flexible(
@@ -60,15 +79,13 @@ class _SiteSelectorState extends State<SiteSelector> {
                   child: ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Scaffold(
-                                    appBar: AppBar(
-                                      title: Text(snapshot
-                                          .data![selectedIndex].siteName),
-                                    ),
-                                    body: PackSelector(
-                                        snapshot.data![selectedIndex]))));
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  // MapPage(snapshot.data![selectedIndex])),
+                                  MapPage(widget.tourSite,
+                                      snapshot.data![selectedIndex])),
+                        );
                       },
                       child: Text('Start')))
             ],

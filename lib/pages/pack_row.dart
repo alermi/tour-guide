@@ -33,10 +33,20 @@ class _PackRowState extends State<PackRow> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Text(
-                    widget.pack.authorName,
+                    widget.pack.tourGuide.name,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text("Rating: " + widget.pack.rating.toString()),
+                  Text("Tour Rating: " +
+                      (widget.pack.rating != null
+                          ? widget.pack.rating.toString() +
+                              " (" +
+                              widget.pack.numRatings.toString() +
+                              " ratings)"
+                          : "--")),
+                  Text("Author Rating: " +
+                      (widget.pack.tourGuide.rating != null
+                          ? widget.pack.tourGuide.rating.toString()
+                          : "--")),
                   Text(widget.pack.pointCount.toString() + " recordings"),
                 ],
               ),

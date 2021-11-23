@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:tour_guide/models/pack.dart';
 import 'package:tour_guide/models/point.dart';
 import 'package:tour_guide/models/tour_site.dart';
 import 'package:tour_guide/pages/audio/audio_page_manager.dart';
@@ -7,15 +9,17 @@ import 'package:tour_guide/pages/audio/audio_player.dart';
 import 'package:tour_guide/pages/error.dart';
 import 'package:tour_guide/pages/get_pack.dart';
 import 'package:tour_guide/pages/loading.dart';
+import 'package:tour_guide/pages/review_dialog.dart';
 import 'package:tour_guide/services/database.dart';
 import 'package:tour_guide/services/storage.dart';
 
 class MapPage extends StatefulWidget {
-  MapPage(this.tourSite, {Key? key}) : super(key: key);
+  MapPage(this.tourSite, this.pack, {Key? key}) : super(key: key);
 
   final TourSite tourSite;
+  final Pack pack;
   @override
-  _MapPageState createState() => _MapPageState(tourSite);
+  _MapPageState createState() => _MapPageState(tourSite, pack);
 }
 
 class _MapPageState extends State<MapPage> {
@@ -24,9 +28,9 @@ class _MapPageState extends State<MapPage> {
     super.initState();
   }
 
-  _MapPageState(this.tourSite)
-      : tourSitePointsFuture = DatabaseService.instance
-            .getPurchasedTourSitePoints(tourSite.uniqueId) {
+  _MapPageState(this.tourSite, this.pack)
+      : tourSitePointsFuture =
+            DatabaseService.instance.getPointsInPurchasedPack(pack.uniqueId) {
     tourSitePointsFuture.then((pointList) {
       setState(() {
         tourSitePoints = pointList;
@@ -40,7 +44,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void> reloadPoints() {
     tourSitePointsFuture =
-        DatabaseService.instance.getPurchasedTourSitePoints(tourSite.uniqueId);
+        DatabaseService.instance.getPointsInPurchasedPack(tourSite.uniqueId);
     return tourSitePointsFuture.then((pointList) {
       // print('Setting state to points ' + pointList.length.toString());
       setState(() {
@@ -55,6 +59,7 @@ class _MapPageState extends State<MapPage> {
 
   Future<void>? downloadFuturesWait;
   final TourSite tourSite;
+  final Pack pack;
   Future<List<Point>> tourSitePointsFuture;
   List<Point>? tourSitePoints;
   Point? _currentPoint;
@@ -98,8 +103,31 @@ class _MapPageState extends State<MapPage> {
                     setCurrentPoint(e);
                   }))
               .toList();
+          print("Opening the map with " +
+              _markers.length.toString() +
+              " points from pack " +
+              widget.pack.uniqueId +
+              " (" +
+              widget.pack.pointCount.toString() +
+              ")");
           return Scaffold(
-            appBar: AppBar(),
+            appBar: AppBar(
+              title: Text(widget.tourSite.siteName),
+              actions: <Widget>[
+                TextButton.icon(
+                  style: TextButton.styleFrom(primary: Colors.white),
+                  onPressed: () async {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return ReviewDialog(widget.pack);
+                        });
+                  },
+                  icon: Icon(Icons.rate_review_outlined),
+                  label: Text('Add Review'),
+                )
+              ],
+            ),
             body: tourSitePoints!.isEmpty
                 ? GetPackView(tourSite, reloadPoints)
                 : GoogleMap(
